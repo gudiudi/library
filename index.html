@@ -12,9 +12,35 @@
   <body>
     <div class="header">
       <div class="header-title">library</div>
-      <button>Add book</button>
+      <button id="addBookModalBtn">Add book</button>
     </div>
     <div class="container"></div>
+    <dialog id="addBookModal">
+      <div class="modal-content">
+        <form>
+          <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+          </div>
+          <div>
+            <label for="author">Author</label>
+            <input type="text" id="author" name="author" required>
+          </div>
+          <div>
+            <label for="pages">Pages</label>  
+            <input type="number" id="pages" name="pages" required>
+          </div>
+          <div>
+            <label for="isRead">Have you read it?</label>
+            <input type="checkbox" id="isRead" name="isRead">
+          </div>
+          <div class="button-group">
+            <button id="closeModalBtn" formmethod="dialog">Cancel</button>
+            <button id="submitModalBtn">Submit</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
   </body>
   <script src="script.js"></script>
 </html>

@@ -84,15 +84,32 @@ function createBookElement(book) {
 }
 
 (() => {
-  const addBookButton = document.querySelector("button");
+  const addBookButton = document.querySelector("#addBookModalBtn");
+  const modal = document.getElementById('addBookModal');
+  const form = document.querySelector('form');
+  const closeModalButton = document.getElementById('closeModalBtn');
+  const submitModalButton = document.getElementById('submitModalBtn');
+  const elements = modal.querySelectorAll("input");
 
-  addBookButton.addEventListener("click", () => {
-    const title = "To Kill a Mockingbird";
-    const author = "Harper Lee";
-    const pages = 281;
-    const isRead = true;
+  addBookButton.addEventListener("click", () => modal.showModal());
 
-    addBookToLibrary(title, author, pages, isRead);
+  submitModalButton.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const data = [];
+    elements.forEach((element) => (element.type === "checkbox") ? data.push(element.checked) : data.push(element.value));
+
+    addBookToLibrary(...data);
     createBookElement(library[library.length - 1]);
+    modal.close();
+    form.reset();
   });
+
+
+  closeModalButton.addEventListener("click", () => modal.close());
 })();
