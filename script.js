@@ -23,6 +23,7 @@ function toggleBookFromLibrary(id) {
   const book = library.find(book => book.id === id);
   if (!book) throw Error("Invalid book id!");
   book.toggleReadStatus();
+  console.log(library);
 }
 
 function removeBookFromLibrary(id) {
@@ -34,8 +35,9 @@ function removeBookFromLibrary(id) {
 function createBookElement(book) {
   const container = document.querySelector(".container");
 
-  const div = document.createElement("div");
-  div.classList.add("book");
+  const bookDiv = document.createElement("div");
+  bookDiv.classList.add("book");
+  bookDiv.dataset.id = book.id;
   
   const bookTitle = document.createElement("div");
   bookTitle.classList.add("book-title");
@@ -47,23 +49,44 @@ function createBookElement(book) {
 
   const bookPages = document.createElement("div");
   bookPages.classList.add("book-pages");
-  bookPages.textContent = book.pages;
+  bookPages.textContent = book.pages + ' pages';
 
   const bookReadStatus = document.createElement("div");
   bookReadStatus.classList.add("book-read-status");
-  bookReadStatus.textContent = book.isRead ? "Read" : "Not read";
+  bookReadStatus.textContent = book.isRead ? "Read" : "Unread";
+
+  const bookButtonGroup = document.createElement("div");
+  bookButtonGroup.classList.add("book-button-group");
+
+  const bookToggleStatusButton = document.createElement("button");
+  bookToggleStatusButton.textContent = book.isRead ? "Mark as unread" : "Mark as read";
+  bookToggleStatusButton.addEventListener("click", () => {
+    toggleBookFromLibrary(book.id);
+    bookReadStatus.textContent = book.isRead ? "Read" : "Unread";
+    bookToggleStatusButton.textContent = book.isRead ? "Mark as unread" : "Mark as read";
+  });
+
+  const bookRemoveButton = document.createElement("button");
+  bookRemoveButton.textContent = "Remove";
+  bookRemoveButton.addEventListener("click", () => {
+    removeBookFromLibrary(book.id);
+    bookDiv.remove();
+  });
   
-  container.appendChild(div);
-  div.appendChild(bookTitle);
-  div.appendChild(bookAuthor);
-  div.appendChild(bookPages);
-  div.appendChild(bookReadStatus);
+  container.appendChild(bookDiv);
+  bookDiv.appendChild(bookTitle);
+  bookDiv.appendChild(bookAuthor);
+  bookDiv.appendChild(bookPages);
+  bookDiv.appendChild(bookReadStatus);
+  bookDiv.appendChild(bookButtonGroup);
+  bookButtonGroup.appendChild(bookToggleStatusButton);
+  bookButtonGroup.appendChild(bookRemoveButton);
 }
 
 (() => {
   const addBookButton = document.querySelector("button");
-  
-  addBookButton.addEventListener("click", (e) => {
+
+  addBookButton.addEventListener("click", () => {
     const title = "To Kill a Mockingbird";
     const author = "Harper Lee";
     const pages = 281;
